@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-ksipgur$8z=o_l!&o+dmcmr2i9ic%2+l!6_=w!t+!*s$5dm6mt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['Moondeity.pythonanywhere.com',
+                 'www.Moondeity.pythonanywhere.com']
 
 
 # Application definition
