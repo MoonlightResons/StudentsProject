@@ -25,10 +25,15 @@ SECRET_KEY = 'django-insecure-ksipgur$8z=o_l!&o+dmcmr2i9ic%2+l!6_=w!t+!*s$5dm6mt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['Moondeity.pythonanywhere.com',
-                 'www.Moondeity.pythonanywhere.com']
+ALLOWED_HOSTS = []
 
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000"
+]
+
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+CORS_ALLOW_CREDENTIALS = True
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,6 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #installed apps
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_swagger',
 
     'apps.users',
     'apps.events',
@@ -53,6 +63,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+AUTH_USER_MODEL = 'users.MyUser'
 
 ROOT_URLCONF = 'StudentsProj.urls'
 
