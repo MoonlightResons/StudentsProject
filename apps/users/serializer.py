@@ -2,16 +2,16 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import Student, Teacher
+from .models import Theuser, StudentProfile, TeacherProfile
 from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
 from django.conf import settings
 
 
-class StudentSerializer(serializers.ModelSerializer):
+class TheuserRegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True,
-        validators=[UniqueValidator(queryset=Student.objects.all())]
+        validators=[UniqueValidator(queryset=Theuser.objects.all())]
     )
     password = serializers.CharField(
         write_only=True,
@@ -24,7 +24,7 @@ class StudentSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = Student
+        model = Theuser
         fields = [
             'id',
             'email',
@@ -40,4 +40,32 @@ class StudentSerializer(serializers.ModelSerializer):
                 {'password': 'Password fields didnt match!'}
             )
         return attrs
+
+class StudentProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentProfile
+        fields = ['quote', 'contact', 'social_network', 'work_status', 'instes_radius', 'achievement']
+        # Указываем, что поля необязательны
+        extra_kwargs = {
+            'quote': {'required': False},
+            'contact': {'required': False},
+            'social_network': {'required': False},
+            'work_status': {'required': False},
+            'instes_radius': {'required': False},
+            'achievement': {'required': False},
+        }
+
+
+class TeacherProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TeacherProfile
+        fields = ['quote', 'contact', 'social_network']
+        # Указываем, что поля необязательны
+        extra_kwargs = {
+            'quote': {'required': False},
+            'contact': {'required': False},
+            'social_network': {'required': False},
+        }
+
+
 
