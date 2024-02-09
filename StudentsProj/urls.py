@@ -52,5 +52,5 @@ urlpatterns = [
     path('', include('rest_framework.urls')),
     path('users/', include("apps.users.urls")),
     path('groups/', include("apps.groups.urls")),
-    # path('events/', include('apps.events.urls')),
+    path('events/', include('apps.events.urls')),
 ]

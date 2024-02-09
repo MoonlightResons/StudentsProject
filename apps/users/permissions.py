@@ -15,3 +15,8 @@ class ProfileOwnerPermission(permissions.BasePermission):
 class GroupOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return obj.group_owner == request.user
+
+
+class EventOwner(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return obj.event_owner == request.user
