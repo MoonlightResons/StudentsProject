@@ -2,7 +2,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import Theuser, StudentProfile, TeacherProfile
+from .models import Theuser, StudentProfile, TeacherProfile, MyUser
 from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
 from django.conf import settings
@@ -55,7 +55,6 @@ class StudentProfileSerializer(serializers.ModelSerializer):
             'achievement': {'required': False},
         }
 
-
 class TeacherProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = TeacherProfile
@@ -66,6 +65,12 @@ class TeacherProfileSerializer(serializers.ModelSerializer):
             'contact': {'required': False},
             'social_network': {'required': False},
         }
+
+
+class TheUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyUser
+        fields = '__all__'
 
 
 

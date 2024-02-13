@@ -15,12 +15,13 @@ class CreateEventView(APIView):
     @swagger_auto_schema(
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
-            required=['group_name', 'group_description', 'group_date', 'group_place'],
+            required=['event_name', 'event_description', 'event_date', 'event_place', "event_status"],
             properties={
-                "group_name": openapi.Schema(type=openapi.TYPE_STRING),
-                "group_description": openapi.Schema(type=openapi.TYPE_STRING),
-                "group_date": openapi.Schema(type=openapi.TYPE_STRING),
-                "group_place": openapi.Schema(type=openapi.TYPE_STRING),
+                "event_name": openapi.Schema(type=openapi.TYPE_STRING),
+                "event_description": openapi.Schema(type=openapi.TYPE_STRING),
+                "event_date": openapi.Schema(type=openapi.TYPE_STRING),
+                "event_place": openapi.Schema(type=openapi.TYPE_STRING),
+                "event_status": openapi.Schema(type=openapi.TYPE_BOOLEAN),
             },
         ),
         responses={200: "OK", 400: "Invalid Data"},
@@ -49,12 +50,13 @@ class EventDetailView(APIView):
     @swagger_auto_schema(
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
-            required=['group_name', 'group_description', 'group_date', 'group_place'],
+            required=['event_name', 'event_description', 'event_date', 'event_place', "event_status"],
             properties={
-                "group_name": openapi.Schema(type=openapi.TYPE_STRING),
-                "group_description": openapi.Schema(type=openapi.TYPE_STRING),
-                "group_date": openapi.Schema(type=openapi.TYPE_STRING),
-                "group_place": openapi.Schema(type=openapi.TYPE_STRING),
+                "event_name": openapi.Schema(type=openapi.TYPE_STRING),
+                "event_description": openapi.Schema(type=openapi.TYPE_STRING),
+                "event_date": openapi.Schema(type=openapi.TYPE_STRING),
+                "event_place": openapi.Schema(type=openapi.TYPE_STRING),
+                "event_status": openapi.Schema(type=openapi.TYPE_BOOLEAN),
             },
         ),
         responses={200: "OK", 400: "Invalid Data"},
@@ -68,8 +70,8 @@ class EventDetailView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
-    def delete(self, request, id):
-        event = Event.objects.get(id=id)
-        event.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(status=status.HTTP_403_FORBIDDEN)
+    # def delete(self, request, id):
+    #     event = Event.objects.get(id=id)
+    #     event.delete()
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
+    #     return Response(status=status.HTTP_403_FORBIDDEN)

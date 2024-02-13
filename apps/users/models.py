@@ -23,6 +23,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         user_status = ""
         if self.is_Teacher:
             user_status = "Teacher"
+        elif self.is_admin or self.is_superuser:
+            user_status = "Admin"
         else:
             user_status = "Student"
         return f'{self.email} - {user_status}'

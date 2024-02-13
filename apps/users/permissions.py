@@ -1,5 +1,6 @@
 from rest_framework import permissions
 
+
 class AnnonPermission(permissions.BasePermission):
     message = 'You are arledy authenticated'
 
@@ -9,7 +10,7 @@ class AnnonPermission(permissions.BasePermission):
 
 class ProfileOwnerPermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return obj.studentuser == request.user
+        return obj.theuser == request.user
 
 
 class GroupOwner(permissions.BasePermission):
@@ -20,3 +21,17 @@ class GroupOwner(permissions.BasePermission):
 class EventOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return obj.event_owner == request.user
+
+
+class SuperUser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_superuser
+
+
+class AdminUser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_admin
+
+
+
+

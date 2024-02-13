@@ -41,6 +41,17 @@ class GroupCreateView(APIView):
 class GroupDetailView(APIView):
     permission_classes = [GroupOwner]
 
+
+    def get(self, request, id):
+        group = get_object_or_404(Group, id=id)
+        serializer = GroupDetailSerializer(group)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, id):
+        group = get_object_or_404(Group, id=id)
+        group.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     @swagger_auto_schema(
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
@@ -56,21 +67,6 @@ class GroupDetailView(APIView):
         responses={200: 'OK', 400: 'Invalid Data'},
         operation_description="Update student profile"
     )
-
-    def get(self, request, id):
-        group = get_object_or_404(Group, id=id)
-        serializer = GroupDetailSerializer(group)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def delete(self, request, id):
-        group = get_object_or_404(Group, id=id)
-
-        # if request.user != team.team_owner:
-        #     return Response(status=status.HTTP_403_FORBIDDEN)
-
-        group.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
     def patch(self, request, id):
         group = Group.objects.get(id=id)
         serializer = GroupDetailSerializer(group, data=request.data)
@@ -82,6 +78,11 @@ class GroupDetailView(APIView):
 
 class GroupMemberRequestVIew(APIView):
 
+    def get(self, request, id):
+        group = get_object_or_404(Group, id=id)
+        serializer = GroupSerializer(group)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     @swagger_auto_schema(
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
@@ -95,14 +96,8 @@ class GroupMemberRequestVIew(APIView):
             },
         ),
         responses={200: 'OK', 400: 'Invalid Data'},
-        operation_description="Update student profile"
+        operation_description="Group request"
     )
-
-    def get(self, request, id):
-        group = get_object_or_404(Group, id=id)
-        serializer = GroupSerializer(group)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
     def patch(self, request, id):
         user = MyUser.objects.get(theuser=request.user)
         group = get_object_or_404(Group, id=id)

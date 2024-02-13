@@ -15,7 +15,6 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class GroupDetailSerializer(serializers.ModelSerializer):
-    # team_owner = TeamOwnerNameSerializer(many=True)
     class Meta:
         model = Group
         fields = "__all__"

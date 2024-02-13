@@ -62,7 +62,8 @@ INSTALLED_APPS = [
 
     'apps.users',
     'apps.events',
-    'apps.groups'
+    'apps.groups',
+    'apps.admin_panel'
 ]
 
 MIDDLEWARE = [

@@ -65,7 +65,7 @@ class TeacherRegisterView(APIView):
             },
         ),
         responses={200: 'OK', 400: 'Invalid Data'},
-        operation_description="Register a new student"
+        operation_description="Register a new Teacher"
     )
 
     def post(self, request):
@@ -207,7 +207,7 @@ class TeacherProfileView(APIView):
             },
         ),
         responses={200: 'OK', 400: 'Invalid Data'},
-        operation_description="Update student profile"
+        operation_description="Update teacher profile"
     )
 
     def patch(self, request, id):

@@ -53,4 +53,5 @@ urlpatterns = [
     path('users/', include("apps.users.urls")),
     path('groups/', include("apps.groups.urls")),
     path('events/', include('apps.events.urls')),
+    path('admins/', include('apps.admin_panel.urls')),
 ]

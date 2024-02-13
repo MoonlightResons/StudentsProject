@@ -8,6 +8,7 @@ class Event(models.Model):
     event_description = models.TextField()
     event_date = models.DateTimeField()
     event_place = models.CharField(max_length=255)
+    event_status = models.BooleanField(default=False)
 
     def __str__(self):
         return self.event_name
