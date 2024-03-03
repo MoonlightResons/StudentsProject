@@ -38,6 +38,7 @@ class Theuser(MyUser):
 
 class StudentProfile(models.Model):
     studentuser = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    profile_avatar = models.ImageField()
     quote = models.TextField()
     contact = models.CharField(max_length=255)
     social_network = models.URLField()
@@ -52,6 +53,7 @@ class StudentProfile(models.Model):
 class TeacherProfile(models.Model):
     teacheruser = models.ForeignKey(MyUser, on_delete=models.CASCADE)
     quote = models.TextField()
+    teacher_avatar = models.ImageField()
     contact = models.CharField(max_length=255)
     social_network = models.URLField()
 

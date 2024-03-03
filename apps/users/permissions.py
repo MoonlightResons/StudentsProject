@@ -28,10 +28,5 @@ class SuperUser(permissions.BasePermission):
         return request.user.is_superuser
 
 
-class AdminUser(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return request.user.is_admin
-
-
 
 

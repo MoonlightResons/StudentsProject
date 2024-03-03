@@ -8,6 +8,15 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    @classmethod
+    def get_token(cls, user):
+        token = super(MyTokenObtainPairSerializer, cls).get_token(user)
+        token['email'] = user.email
+        token['is_Teacher'] = user.is_Teacher
+        return token
+
 class TheuserRegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True,
@@ -53,7 +62,9 @@ class StudentProfileSerializer(serializers.ModelSerializer):
             'work_status': {'required': False},
             'instes_radius': {'required': False},
             'achievement': {'required': False},
+            'profile_avatar': {'required': False},
         }
+
 
 class TeacherProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -64,6 +75,7 @@ class TeacherProfileSerializer(serializers.ModelSerializer):
             'quote': {'required': False},
             'contact': {'required': False},
             'social_network': {'required': False},
+            'teacher_avatar': {'reqired': False},
         }
 
 

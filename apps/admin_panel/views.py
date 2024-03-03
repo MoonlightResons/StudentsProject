@@ -1,11 +1,11 @@
 from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
-from apps.users.permissions import AdminUser, SuperUser
+from apps.users.permissions import SuperUser
 from apps.users.models import Theuser, StudentProfile, TeacherProfile, MyUser
 from .serializer import AdminRegisterSerializer
 from ..events.models import Event
@@ -16,33 +16,35 @@ from ..users.serializer import TheuserRegisterSerializer, StudentProfileSerializ
 
 
 class AdminUsersList(ListAPIView):
-    permission_classes = [AdminUser]
+    permission_classes = [permissions.IsAdminUser]
     queryset = MyUser.objects.all()
     serializer_class = TheUserSerializer
 
 
 class AdminStudentsProfile(ListAPIView):
-    permission_classes = [AdminUser]
+    permission_classes = [permissions.IsAdminUser]
     queryset = StudentProfile.objects.all()
     serializer_class = StudentProfileSerializer
 
 
 class AdminTeachersProfile(ListAPIView):
-    permission_classes = [AdminUser]
+    permission_classes = [permissions.IsAdminUser]
     queryset = TeacherProfile.objects.all()
     serializer_class = TeacherProfileSerializer
 
 
 class AdminGroupList(ListAPIView):
-    permission_classes = [AdminUser]
+    permission_classes = [permissions.IsAdminUser]
     queryset = Group.objects.all()
     serializer_class = GroupDetailSerializer
 
 
 class AdminEventsList(ListAPIView):
-    permission_classes = [AdminUser]
+    permission_classes = [permissions.IsAdminUser]
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+
+
 class AdminUserRegister(APIView):
     permission_classes = [SuperUser]
 
@@ -67,7 +69,7 @@ class AdminUserRegister(APIView):
             admin = Theuser.objects.create(
                 email=request.data['email'],
                 name=request.data['name'],
-                is_admin=True
+                is_staff=True
             )
             admin.set_password(request.data['password'])
             admin.save()
@@ -76,7 +78,7 @@ class AdminUserRegister(APIView):
 
 
 class AdminCreateStudentView(APIView):
-    permission_classes = [AdminUser]
+    permission_classes = [permissions.IsAdminUser]
 
     @swagger_auto_schema(
         request_body=openapi.Schema(
@@ -109,7 +111,7 @@ class AdminCreateStudentView(APIView):
 
 
 class AdminCreateTeacherView(APIView):
-    permission_classes = [AdminUser]
+    permission_classes = [permissions.IsAdminUser]
 
     @swagger_auto_schema(
         request_body=openapi.Schema(
@@ -143,7 +145,7 @@ class AdminCreateTeacherView(APIView):
 
 
 class AdminStudentProfileView(APIView):
-    permission_classes = [AdminUser]
+    permission_classes = [permissions.IsAdminUser]
 
     def get(self, request, id):
         student = StudentProfile.objects.get(id=id)
@@ -183,7 +185,7 @@ class AdminStudentProfileView(APIView):
 
 
 class AdminTeacherProfileView(APIView):
-    permission_classes = [AdminUser]
+    permission_classes = [permissions.IsAdminUser]
 
     def get(self, request, id):
         student = TeacherProfile.objects.get(id=id)
@@ -220,7 +222,7 @@ class AdminTeacherProfileView(APIView):
 
 
 class AdminGroupCreateView(APIView):
-    permission_classes = [AdminUser]
+    permission_classes = [permissions.IsAdminUser]
 
     @swagger_auto_schema(
         request_body=openapi.Schema(
@@ -254,7 +256,7 @@ class AdminGroupCreateView(APIView):
 
 
 class AdminGroupDetailView(APIView):
-    permission_classes = [AdminUser]
+    permission_classes = [permissions.IsAdminUser]
 
     def get(self, request, id):
         group = get_object_or_404(Group, id=id)
@@ -291,7 +293,7 @@ class AdminGroupDetailView(APIView):
 
 
 class AdminCreateEventView(APIView):
-    permission_classes = [AdminUser]
+    permission_classes = [permissions.IsAdminUser]
 
     @swagger_auto_schema(
         request_body=openapi.Schema(
@@ -324,7 +326,7 @@ class AdminCreateEventView(APIView):
 
 
 class AdminEventDetailView(APIView):
-    permission_classes = [AdminUser]
+    permission_classes = [permissions.IsAdminUser]
 
     def get(self, request, id):
         event = Event.objects.get(id=id)

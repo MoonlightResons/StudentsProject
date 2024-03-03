@@ -3,16 +3,65 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions, status
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 from .models import Theuser, StudentProfile, MyUser, TeacherProfile
 from .permissions import AnnonPermission, ProfileOwnerPermission
 from rest_framework.permissions import IsAuthenticated
-from .serializer import TheuserRegisterSerializer, StudentProfileSerializer, TeacherProfileSerializer
+from .serializer import TheuserRegisterSerializer, StudentProfileSerializer, TeacherProfileSerializer, \
+    MyTokenObtainPairSerializer
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from django.shortcuts import get_object_or_404
 from selenium import webdriver
+
+
+class LoginView(TokenObtainPairView):
+    permission_classes = (AnnonPermission,)
+    serializer_class = MyTokenObtainPairSerializer
+
+
+class RefreshTokenView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['refresh_token'],
+            properties={
+                'refresh_token': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+        ),
+        responses={200: 'OK', 400: 'Invalid Data'},
+        operation_description="Refresh token"
+    )
+    def post(self, request):
+        try:
+            refresh_token = request.data.get('refresh_token')
+            if refresh_token:
+                token = RefreshToken(refresh_token)
+
+                # Получение данных о пользователе из токена
+                user_id = token.payload.get('user_id', None)
+                is_admin = token.payload.get('is_staff', False)
+                is_active = token.payload.get('is_active', False)
+                is_Teacher = token.payload.get('is_Teacher', False)
+
+                return Response({
+                    'access_token': str(token.access_token),
+                    'user_status': {
+                        'user_id': user_id,
+                        'is_admin': is_admin,
+                        'is_active': is_active,
+                        'is_Teacher': is_Teacher
+                    }
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Refresh token is missing'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class StudentRegisterView(APIView):
@@ -106,12 +155,6 @@ class StudentProfileView(APIView):
         chrome_options.add_argument('--disable-blink-features=AutomationControlled')
         driver = webdriver.Chrome(options=chrome_options)
 
-        # # try:
-        # driver.get("https://www.google.com")
-        # print("Page title was '{}'".format(driver.title))
-
-        # finally:
-        #     driver.quit()
 
         url_login = 'https://www.linkedin.com/login/ru?fromSignIn=true&trk=guest_homepage-basic_nav-header-signin'
         driver.get(url_login)
