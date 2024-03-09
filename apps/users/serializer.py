@@ -53,7 +53,7 @@ class TheuserRegisterSerializer(serializers.ModelSerializer):
 class StudentProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentProfile
-        fields = ['quote', 'contact', 'social_network', 'work_status', 'instes_radius', 'achievement']
+        fields = ['quote', 'contact', 'social_network', 'work_status', 'instes_radius', 'achievement', 'profile_avatar']
         # Указываем, что поля необязательны
         extra_kwargs = {
             'quote': {'required': False},
@@ -69,7 +69,7 @@ class StudentProfileSerializer(serializers.ModelSerializer):
 class TeacherProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = TeacherProfile
-        fields = ['quote', 'contact', 'social_network']
+        fields = ['quote', 'contact', 'social_network', 'profile_avatar']
         # Указываем, что поля необязательны
         extra_kwargs = {
             'quote': {'required': False},

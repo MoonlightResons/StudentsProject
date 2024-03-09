@@ -137,9 +137,14 @@ class StudentProfileView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, id):
-        student = StudentProfile.objects.get(id=id)
-        serializer = StudentProfileSerializer(student)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            student = StudentProfile.objects.get(id=id)
+            serializer = StudentProfileSerializer(student)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except StudentProfile.DoesNotExist:
+            serializer = StudentProfileSerializer(data={})
+            if serializer.is_valid():
+                return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 
     @classmethod
@@ -190,7 +195,7 @@ class StudentProfileView(APIView):
     @swagger_auto_schema(
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
-            required=['quote', 'contact', 'social_network', 'work_status', 'achievement', 'instes_radius'],
+            required=['quote', 'contact', 'social_network', 'work_status', 'achievement', 'instes_radius', 'profile_avatar'],
             properties={
                 'quote': openapi.Schema(type=openapi.TYPE_STRING),
                 'contact': openapi.Schema(type=openapi.TYPE_STRING),
@@ -198,6 +203,7 @@ class StudentProfileView(APIView):
                 'work_status': openapi.Schema(type=openapi.TYPE_STRING),
                 'achievement': openapi.Schema(type=openapi.TYPE_STRING),
                 'instes_radius': openapi.Schema(type=openapi.TYPE_STRING),
+                'profile_avatar': openapi.Schema(type=openapi.TYPE_STRING),
             },
         ),
         responses={200: 'OK', 400: 'Invalid Data'},
@@ -242,11 +248,12 @@ class TeacherProfileView(APIView):
     @swagger_auto_schema(
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
-            required=['quote', 'contact', 'social_network'],
+            required=['quote', 'contact', 'social_network', "teacher_avatar"],
             properties={
                 'quote': openapi.Schema(type=openapi.TYPE_STRING),
                 'contact': openapi.Schema(type=openapi.TYPE_STRING),
                 'social_network': openapi.Schema(type=openapi.TYPE_STRING),
+                'teacher_avatar': openapi.Schema(type=openapi.TYPE_STRING),
             },
         ),
         responses={200: 'OK', 400: 'Invalid Data'},

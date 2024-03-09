@@ -29,15 +29,13 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
             user_status = "Student"
         return f'{self.email} - {user_status}'
 
-
 class Theuser(MyUser):
     name = models.CharField(max_length=255, null=False, blank=False)
     second_name = models.CharField(max_length=255, null=False, blank=False)
 
 
-
 class StudentProfile(models.Model):
-    studentuser = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    studentuser = models.OneToOneField(Theuser, on_delete=models.CASCADE, related_name='student_profile')
     profile_avatar = models.ImageField()
     quote = models.TextField()
     contact = models.CharField(max_length=255)
@@ -51,7 +49,7 @@ class StudentProfile(models.Model):
 
 
 class TeacherProfile(models.Model):
-    teacheruser = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    teacheruser = models.OneToOneField(Theuser, on_delete=models.CASCADE, related_name='teacher_profile')
     quote = models.TextField()
     teacher_avatar = models.ImageField()
     contact = models.CharField(max_length=255)
